@@ -23,7 +23,7 @@ export function Footer() {
             <h3 className="text-white mb-4">Links Rápidos</h3>
             <nav className="flex flex-col gap-2">
               <a
-                href="/"
+                href="#"
                 className="text-neutral-400 hover:text-red-700 transition-colors"
               >
                 Início
