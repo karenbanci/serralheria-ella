@@ -1,16 +1,19 @@
-import { motion } from 'motion/react';
-import { Shield, Award, Users } from 'lucide-react';
-import { useInView } from '../hooks/useInView';
-import { useState, useEffect } from 'react';
-import { projectId, publicAnonKey } from '/utils/supabase/info';
+import { motion } from "motion/react";
+import { Shield, Award, Users } from "lucide-react";
+import { useInView } from "../hooks/useInView";
+import { useState, useEffect } from "react";
+import { projectId, publicAnonKey } from "/utils/supabase/info";
 
 export function AboutSection() {
   const [ref, isInView] = useInView({ threshold: 0.2 });
   const [content, setContent] = useState({
-    title: 'Sobre Nós',
-    subtitle: 'A Serralheria ELLA é especialista em soluções de alumínio e vidro para projetos residenciais, comerciais e obras de alto padrão.',
-    description1: 'Atuamos em parceria com a Serralheria Kalumínios, referência em qualidade, precisão e acabamento no mercado.',
-    description2: 'Nossa equipe une técnica, criatividade e compromisso com a excelência. Trabalhamos com processos bem estruturados, desde o entendimento das necessidades do cliente até o desenvolvimento de soluções sob medida que garantem funcionalidade, segurança e estética.',
+    title: "Sobre Nós",
+    subtitle:
+      "A Serralheria ELLA é especialista em soluções de alumínio e vidro para projetos residenciais, comerciais e obras de alto padrão.",
+    description1:
+      "Atuamos em parceria com a Serralheria Kalumínios, referência em qualidade, precisão e acabamento no mercado.",
+    description2:
+      "Nossa equipe une técnica, criatividade e compromisso com a excelência. Trabalhamos com processos bem estruturados, desde o entendimento das necessidades do cliente até o desenvolvimento de soluções sob medida que garantem funcionalidade, segurança e estética.",
   });
 
   const API_URL = `https://${projectId}.supabase.co/functions/v1/make-server-294ae748`;
@@ -26,7 +29,7 @@ export function AboutSection() {
           setContent(data.content);
         }
       } catch (error) {
-        console.error('Error loading about content:', error);
+        console.error("Error loading about content:", error);
       }
     };
 
@@ -36,23 +39,29 @@ export function AboutSection() {
   const features = [
     {
       icon: Shield,
-      title: 'Qualidade Garantida',
-      description: 'Referência em qualidade, precisão e acabamento em todas as etapas do projeto.',
+      title: "Qualidade Garantida",
+      description:
+        "Referência em qualidade, precisão e acabamento em todas as etapas do projeto.",
     },
     {
       icon: Award,
-      title: 'Alto Padrão',
-      description: 'Projetos residenciais, comerciais e obras de alto padrão com acabamento impecável.',
+      title: "Alto Padrão",
+      description:
+        "Projetos residenciais, comerciais e obras de alto padrão com acabamento impecável.",
     },
     {
       icon: Users,
-      title: 'Equipe Especializada',
-      description: 'Profissionais qualificados que unem técnica, criatividade e compromisso.',
+      title: "Equipe Especializada",
+      description:
+        "Profissionais qualificados que unem técnica, criatividade e compromisso.",
     },
   ];
 
   return (
-    <section id="about" className="py-20 bg-neutral-950 relative overflow-hidden">
+    <section
+      id="sobre"
+      className="py-20 bg-neutral-950 relative overflow-hidden"
+    >
       {/* Decorative Elements */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-red-900/10 rounded-full blur-3xl" />
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-red-700/10 rounded-full blur-3xl" />

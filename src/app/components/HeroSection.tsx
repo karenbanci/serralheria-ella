@@ -83,7 +83,7 @@ export function HeroSection() {
         transition={{ delay: 1.2, duration: 0.8 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2"
       >
-        <a href="#about">
+        <a href="#sobre">
           <motion.div
             animate={{ y: [0, 10, 0] }}
             transition={{ repeat: Infinity, duration: 2 }}

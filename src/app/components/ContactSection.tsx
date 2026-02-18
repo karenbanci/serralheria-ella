@@ -1,15 +1,15 @@
-import { motion } from 'motion/react';
-import { Mail, MapPin, Phone, CheckCircle } from 'lucide-react';
-import { useInView } from '../hooks/useInView';
-import { useState } from 'react';
+import { motion } from "motion/react";
+import { Mail, MapPin, Phone, CheckCircle } from "lucide-react";
+import { useInView } from "../hooks/useInView";
+import { useState } from "react";
 
 export function ContactSection() {
   const [ref, isInView] = useInView({ threshold: 0.2 });
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    message: '',
+    name: "",
+    email: "",
+    phone: "",
+    message: "",
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -17,10 +17,10 @@ export function ContactSection() {
     e.preventDefault();
     // Simula envio do formulário
     setIsSubmitted(true);
-    
+
     // Reseta o formulário após 3 segundos
     setTimeout(() => {
-      setFormData({ name: '', email: '', phone: '', message: '' });
+      setFormData({ name: "", email: "", phone: "", message: "" });
       setIsSubmitted(false);
     }, 3000);
   };
@@ -28,26 +28,29 @@ export function ContactSection() {
   const contactInfo = [
     {
       icon: Phone,
-      title: 'Telefone',
-      value: '(11) 98941-5518',
-      link: 'tel:+5511989415518',
+      title: "Telefone",
+      value: "(11) 98941-5518",
+      link: "tel:+5511989415518",
     },
     {
       icon: Mail,
-      title: 'Email',
-      value: 'serralheriaella@gmail.com',
-      link: 'mailto:serralheriaella@gmail.com',
+      title: "Email",
+      value: "serralheriaella@gmail.com",
+      link: "mailto:serralheriaella@gmail.com",
     },
     {
       icon: MapPin,
-      title: 'Endereço',
-      value: 'Localização em Breve',
-      link: '#',
+      title: "Endereço",
+      value: "Localização em Breve",
+      link: "#",
     },
   ];
 
   return (
-    <section id="contact" className="py-20 bg-gradient-to-b from-neutral-900 to-neutral-950 relative overflow-hidden">
+    <section
+      id="contato"
+      className="py-20 bg-gradient-to-b from-neutral-900 to-neutral-950 relative overflow-hidden"
+    >
       {/* Decorative Elements */}
       <div className="absolute top-1/2 right-0 w-96 h-96 bg-red-700/10 rounded-full blur-3xl" />
 
@@ -82,7 +85,9 @@ export function ContactSection() {
                   type="text"
                   id="name"
                   value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
                   required
                   className="w-full px-4 py-3 bg-neutral-900 border border-neutral-700 rounded-lg focus:border-red-700 focus:outline-none text-white transition-colors"
                   placeholder="Seu nome"
@@ -97,7 +102,9 @@ export function ContactSection() {
                   type="email"
                   id="email"
                   value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
                   required
                   className="w-full px-4 py-3 bg-neutral-900 border border-neutral-700 rounded-lg focus:border-red-700 focus:outline-none text-white transition-colors"
                   placeholder="seu@email.com"
@@ -112,7 +119,9 @@ export function ContactSection() {
                   type="tel"
                   id="phone"
                   value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, phone: e.target.value })
+                  }
                   required
                   className="w-full px-4 py-3 bg-neutral-900 border border-neutral-700 rounded-lg focus:border-red-700 focus:outline-none text-white transition-colors"
                   placeholder="(XX) XXXXX-XXXX"
@@ -120,13 +129,18 @@ export function ContactSection() {
               </div>
 
               <div>
-                <label htmlFor="message" className="block text-neutral-300 mb-2">
+                <label
+                  htmlFor="message"
+                  className="block text-neutral-300 mb-2"
+                >
                   Mensagem
                 </label>
                 <textarea
                   id="message"
                   value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, message: e.target.value })
+                  }
                   required
                   rows={5}
                   className="w-full px-4 py-3 bg-neutral-900 border border-neutral-700 rounded-lg focus:border-red-700 focus:outline-none text-white transition-colors resize-none"
@@ -144,8 +158,13 @@ export function ContactSection() {
 
             {isSubmitted && (
               <div className="mt-4 text-center">
-                <CheckCircle size={24} className="text-green-500 inline-block mr-2" />
-                <p className="text-green-500">Mensagem enviada! Entraremos em contato em breve.</p>
+                <CheckCircle
+                  size={24}
+                  className="text-green-500 inline-block mr-2"
+                />
+                <p className="text-green-500">
+                  Mensagem enviada! Entraremos em contato em breve.
+                </p>
               </div>
             )}
           </motion.div>
@@ -158,7 +177,9 @@ export function ContactSection() {
             className="space-y-8"
           >
             <div className="bg-gradient-to-br from-neutral-900 to-neutral-950 p-8 rounded-lg border border-red-900/20">
-              <h3 className="text-2xl text-white mb-6">Informações de Contato</h3>
+              <h3 className="text-2xl text-white mb-6">
+                Informações de Contato
+              </h3>
               <div className="space-y-6">
                 {contactInfo.map((info, index) => (
                   <a
@@ -181,10 +202,14 @@ export function ContactSection() {
             </div>
 
             <div className="bg-gradient-to-br from-neutral-900 to-neutral-950 p-8 rounded-lg border border-red-900/20">
-              <h3 className="text-2xl text-white mb-4">Horário de Atendimento</h3>
+              <h3 className="text-2xl text-white mb-4">
+                Horário de Atendimento
+              </h3>
               <div className="space-y-2 text-neutral-300">
                 <p>Segunda a Segunda: 6h - 23h</p>
-                <p className="text-red-400 text-sm mt-3">Atendimento todos os dias!</p>
+                <p className="text-red-400 text-sm mt-3">
+                  Atendimento todos os dias!
+                </p>
               </div>
             </div>
           </motion.div>

@@ -1,4 +1,5 @@
-import { motion } from 'motion/react';
+import { motion } from "motion/react";
+import { HashLink } from "react-router-hash-link";
 
 export function Footer() {
   return (
@@ -8,11 +9,12 @@ export function Footer() {
           {/* Brand */}
           <div>
             <div className="text-2xl mb-4">
-              <span className="text-white">Serralheria</span>{' '}
+              <span className="text-white">Serralheria</span>{" "}
               <span className="text-red-700">ELLA</span>
             </div>
             <p className="text-neutral-400">
-              Especialistas em soluções de alumínio e vidro com excelência e qualidade.
+              Especialistas em soluções de alumínio e vidro com excelência e
+              qualidade.
             </p>
           </div>
 
@@ -20,18 +22,33 @@ export function Footer() {
           <div>
             <h3 className="text-white mb-4">Links Rápidos</h3>
             <nav className="flex flex-col gap-2">
-              <a href="#home" className="text-neutral-400 hover:text-red-700 transition-colors">
+              <a
+                href="/"
+                className="text-neutral-400 hover:text-red-700 transition-colors"
+              >
                 Início
               </a>
-              <a href="#about" className="text-neutral-400 hover:text-red-700 transition-colors">
+              <HashLink
+                smooth
+                to="#sobre"
+                className="text-neutral-400 hover:text-red-700 transition-colors"
+              >
                 Sobre Nós
-              </a>
-              <a href="#portfolio" className="text-neutral-400 hover:text-red-700 transition-colors">
+              </HashLink>
+              <HashLink
+                smooth
+                to="#portfolio"
+                className="text-neutral-400 hover:text-red-700 transition-colors"
+              >
                 Portfólio
-              </a>
-              <a href="#contact" className="text-neutral-400 hover:text-red-700 transition-colors">
+              </HashLink>
+              <HashLink
+                smooth
+                to="#contato"
+                className="text-neutral-400 hover:text-red-700 transition-colors"
+              >
                 Contato
-              </a>
+              </HashLink>
             </nav>
           </div>
 
@@ -51,7 +68,8 @@ export function Footer() {
         {/* Copyright */}
         <div className="border-t border-neutral-900 pt-8 text-center">
           <p className="text-neutral-400">
-            © {new Date().getFullYear()} Serralheria ELLA. Todos os direitos reservados.
+            © {new Date().getFullYear()} Serralheria ELLA. Todos os direitos
+            reservados.
           </p>
           <p className="text-neutral-500 text-sm mt-2">
             Em parceria com Serralheria Kalumínios
