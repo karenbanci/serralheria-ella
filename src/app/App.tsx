@@ -1,30 +1,22 @@
 import { createHashRouter, RouterProvider } from "react-router-dom";
-import { Header } from "./components/Header";
-import { HeroSection } from "./components/HeroSection";
-import { AboutSection } from "./components/AboutSection";
-import { PortfolioSection } from "./components/PortfolioSection";
-import { ContactSection } from "./components/ContactSection";
-import { Footer } from "./components/Footer";
-import { AdminPanel } from "./components/AdminPanel";
-import { WhatsAppButton } from "./components/WhatsAppButton";
+import { Layout } from "./layouts/Layout";
+import { Home } from "./pages/Home";
+import { About } from "./pages/About";
+import { Login } from "./pages/Login";
+import { Admin } from "./pages/Admin";
+import { NotFound } from "./pages/NotFound";
 
 const router = createHashRouter([
   {
     path: "/",
-    element: (
-      <div className="min-h-screen bg-neutral-950">
-        <Header />
-        <main>
-          <HeroSection />
-          <AboutSection />
-          <PortfolioSection />
-          <ContactSection />
-        </main>
-        <Footer />
-        <WhatsAppButton />
-        <AdminPanel />
-      </div>
-    ),
+    Component: Layout,
+    children: [
+      { index: true, Component: Home },
+      { path: "sobre", Component: About },
+      { path: "login", Component: Login },
+      { path: "admin", Component: Admin },
+      { path: "*", Component: NotFound },
+    ],
   },
 ]);
 
