@@ -1,9 +1,12 @@
-import { motion } from 'motion/react';
-import { ChevronDown } from 'lucide-react';
+import { motion } from "motion/react";
+import { ChevronDown } from "lucide-react";
 
 export function HeroSection() {
   return (
-    <section id="home" className="relative h-screen flex items-center justify-center overflow-hidden">
+    <section
+      id="home"
+      className="relative h-screen flex items-center justify-center overflow-hidden"
+    >
       {/* Background Image with Overlay */}
       <div className="absolute inset-0">
         <img
@@ -47,8 +50,8 @@ export function HeroSection() {
             transition={{ delay: 0.6, duration: 0.8 }}
             className="text-xl md:text-2xl text-neutral-300 max-w-3xl mx-auto mb-8"
           >
-            Especialistas em soluções de alumínio e vidro para projetos residenciais, comerciais
-            e obras de alto padrão.
+            Especialistas em soluções de alumínio e vidro para projetos
+            residenciais, comerciais e obras de alto padrão.
           </motion.p>
 
           <motion.div
@@ -80,12 +83,14 @@ export function HeroSection() {
         transition={{ delay: 1.2, duration: 0.8 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2"
       >
-        <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ repeat: Infinity, duration: 2 }}
-        >
-          <ChevronDown size={32} className="text-white" />
-        </motion.div>
+        <a href="#about">
+          <motion.div
+            animate={{ y: [0, 10, 0] }}
+            transition={{ repeat: Infinity, duration: 2 }}
+          >
+            <ChevronDown size={32} className="text-white cursor-pointer" />
+          </motion.div>
+        </a>
       </motion.div>
     </section>
   );
