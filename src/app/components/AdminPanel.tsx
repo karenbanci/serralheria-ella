@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { X, Plus, Edit2, Trash2, Save, Image as ImageIcon } from 'lucide-react';
-import { projectId, publicAnonKey } from '/utils/supabase/info';
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { X, Plus, Edit2, Trash2, Save, Image as ImageIcon } from "lucide-react";
+import { projectId, publicAnonKey } from "/utils/supabase/info";
 
 interface Project {
   id: number;
@@ -19,19 +19,21 @@ interface AboutContent {
 
 export function AdminPanel() {
   const [isOpen, setIsOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<'portfolio' | 'about'>('portfolio');
+  const [activeTab, setActiveTab] = useState<"portfolio" | "about">(
+    "portfolio",
+  );
   const [projects, setProjects] = useState<Project[]>([]);
   const [aboutContent, setAboutContent] = useState<AboutContent>({
-    title: '',
-    subtitle: '',
-    description1: '',
-    description2: '',
+    title: "",
+    subtitle: "",
+    description1: "",
+    description2: "",
   });
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [newProject, setNewProject] = useState<Partial<Project>>({
-    title: '',
-    category: '',
-    image: '',
+    title: "",
+    category: "",
+    image: "",
   });
 
   const API_URL = `https://${projectId}.supabase.co/functions/v1/make-server-294ae748`;
@@ -47,7 +49,7 @@ export function AdminPanel() {
         setProjects(data.projects);
       }
     } catch (error) {
-      console.error('Error loading projects:', error);
+      console.error("Error loading projects:", error);
     }
   };
 
@@ -62,7 +64,7 @@ export function AdminPanel() {
         setAboutContent(data.content);
       }
     } catch (error) {
-      console.error('Error loading about content:', error);
+      console.error("Error loading about content:", error);
     }
   };
 
@@ -76,16 +78,16 @@ export function AdminPanel() {
   // Add new project
   const handleAddProject = async () => {
     if (!newProject.title || !newProject.category || !newProject.image) {
-      alert('Preencha todos os campos');
+      alert("Preencha todos os campos");
       return;
     }
 
     try {
       const id = Date.now();
       const response = await fetch(`${API_URL}/portfolio`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: `Bearer ${publicAnonKey}`,
         },
         body: JSON.stringify({ ...newProject, id }),
@@ -93,13 +95,13 @@ export function AdminPanel() {
 
       const data = await response.json();
       if (data.success) {
-        alert('Projeto adicionado com sucesso!');
-        setNewProject({ title: '', category: '', image: '' });
+        alert("Projeto adicionado com sucesso!");
+        setNewProject({ title: "", category: "", image: "" });
         loadProjects();
       }
     } catch (error) {
-      console.error('Error adding project:', error);
-      alert('Erro ao adicionar projeto');
+      console.error("Error adding project:", error);
+      alert("Erro ao adicionar projeto");
     }
   };
 
@@ -108,45 +110,48 @@ export function AdminPanel() {
     if (!editingProject) return;
 
     try {
-      const response = await fetch(`${API_URL}/portfolio/${editingProject.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${publicAnonKey}`,
+      const response = await fetch(
+        `${API_URL}/portfolio/${editingProject.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${publicAnonKey}`,
+          },
+          body: JSON.stringify(editingProject),
         },
-        body: JSON.stringify(editingProject),
-      });
+      );
 
       const data = await response.json();
       if (data.success) {
-        alert('Projeto atualizado com sucesso!');
+        alert("Projeto atualizado com sucesso!");
         setEditingProject(null);
         loadProjects();
       }
     } catch (error) {
-      console.error('Error updating project:', error);
-      alert('Erro ao atualizar projeto');
+      console.error("Error updating project:", error);
+      alert("Erro ao atualizar projeto");
     }
   };
 
   // Delete project
   const handleDeleteProject = async (id: number) => {
-    if (!confirm('Tem certeza que deseja excluir este projeto?')) return;
+    if (!confirm("Tem certeza que deseja excluir este projeto?")) return;
 
     try {
       const response = await fetch(`${API_URL}/portfolio/${id}`, {
-        method: 'DELETE',
+        method: "DELETE",
         headers: { Authorization: `Bearer ${publicAnonKey}` },
       });
 
       const data = await response.json();
       if (data.success) {
-        alert('Projeto excluído com sucesso!');
+        alert("Projeto excluído com sucesso!");
         loadProjects();
       }
     } catch (error) {
-      console.error('Error deleting project:', error);
-      alert('Erro ao excluir projeto');
+      console.error("Error deleting project:", error);
+      alert("Erro ao excluir projeto");
     }
   };
 
@@ -154,9 +159,9 @@ export function AdminPanel() {
   const handleUpdateAbout = async () => {
     try {
       const response = await fetch(`${API_URL}/about`, {
-        method: 'PUT',
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: `Bearer ${publicAnonKey}`,
         },
         body: JSON.stringify(aboutContent),
@@ -164,26 +169,26 @@ export function AdminPanel() {
 
       const data = await response.json();
       if (data.success) {
-        alert('Conteúdo atualizado com sucesso!');
+        alert("Conteúdo atualizado com sucesso!");
       }
     } catch (error) {
-      console.error('Error updating about content:', error);
-      alert('Erro ao atualizar conteúdo');
+      console.error("Error updating about content:", error);
+      alert("Erro ao atualizar conteúdo");
     }
   };
 
   const categories = [
-    { id: 'portoes', label: 'Portões' },
-    { id: 'box', label: 'Box de Banheiro' },
-    { id: 'escada', label: 'Escadas e Guarda-Corpos' },
-    { id: 'fachadas', label: 'Fachadas' },
-    { id: 'esquadrias', label: 'Esquadrias' },
+    { id: "portoes", label: "Portões" },
+    { id: "box", label: "Box de Banheiro" },
+    { id: "escada", label: "Escadas e Guarda-Corpos" },
+    { id: "fachadas", label: "Fachadas" },
+    { id: "esquadrias", label: "Esquadrias" },
   ];
 
   return (
     <>
       {/* Admin Button */}
-      <motion.button
+      {/* <motion.button
         initial={{ opacity: 0, scale: 0 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 1 }}
@@ -192,7 +197,7 @@ export function AdminPanel() {
         title="Painel Admin"
       >
         <Edit2 size={24} />
-      </motion.button>
+      </motion.button> */}
 
       {/* Admin Panel Modal */}
       <AnimatePresence>
@@ -217,7 +222,9 @@ export function AdminPanel() {
               <div className="p-6">
                 {/* Header */}
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-2xl text-white">Painel de Administração</h2>
+                  <h2 className="text-2xl text-white">
+                    Painel de Administração
+                  </h2>
                   <button
                     onClick={() => setIsOpen(false)}
                     className="text-neutral-400 hover:text-white transition-colors"
@@ -229,21 +236,21 @@ export function AdminPanel() {
                 {/* Tabs */}
                 <div className="flex gap-4 mb-6">
                   <button
-                    onClick={() => setActiveTab('portfolio')}
+                    onClick={() => setActiveTab("portfolio")}
                     className={`px-6 py-3 rounded-lg transition-colors ${
-                      activeTab === 'portfolio'
-                        ? 'bg-red-700 text-white'
-                        : 'bg-neutral-800 text-neutral-400 hover:bg-neutral-700'
+                      activeTab === "portfolio"
+                        ? "bg-red-700 text-white"
+                        : "bg-neutral-800 text-neutral-400 hover:bg-neutral-700"
                     }`}
                   >
                     Portfólio
                   </button>
                   <button
-                    onClick={() => setActiveTab('about')}
+                    onClick={() => setActiveTab("about")}
                     className={`px-6 py-3 rounded-lg transition-colors ${
-                      activeTab === 'about'
-                        ? 'bg-red-700 text-white'
-                        : 'bg-neutral-800 text-neutral-400 hover:bg-neutral-700'
+                      activeTab === "about"
+                        ? "bg-red-700 text-white"
+                        : "bg-neutral-800 text-neutral-400 hover:bg-neutral-700"
                     }`}
                   >
                     Sobre Nós
@@ -251,7 +258,7 @@ export function AdminPanel() {
                 </div>
 
                 {/* Portfolio Tab */}
-                {activeTab === 'portfolio' && (
+                {activeTab === "portfolio" && (
                   <div className="space-y-6">
                     {/* Add New Project */}
                     <div className="bg-neutral-800 p-6 rounded-lg">
@@ -264,14 +271,20 @@ export function AdminPanel() {
                           placeholder="Título do projeto"
                           value={newProject.title}
                           onChange={(e) =>
-                            setNewProject({ ...newProject, title: e.target.value })
+                            setNewProject({
+                              ...newProject,
+                              title: e.target.value,
+                            })
                           }
                           className="w-full px-4 py-3 bg-neutral-900 border border-neutral-700 rounded-lg text-white focus:border-red-700 focus:outline-none"
                         />
                         <select
                           value={newProject.category}
                           onChange={(e) =>
-                            setNewProject({ ...newProject, category: e.target.value })
+                            setNewProject({
+                              ...newProject,
+                              category: e.target.value,
+                            })
                           }
                           className="w-full px-4 py-3 bg-neutral-900 border border-neutral-700 rounded-lg text-white focus:border-red-700 focus:outline-none"
                         >
@@ -287,7 +300,10 @@ export function AdminPanel() {
                           placeholder="URL da imagem"
                           value={newProject.image}
                           onChange={(e) =>
-                            setNewProject({ ...newProject, image: e.target.value })
+                            setNewProject({
+                              ...newProject,
+                              image: e.target.value,
+                            })
                           }
                           className="w-full px-4 py-3 bg-neutral-900 border border-neutral-700 rounded-lg text-white focus:border-red-700 focus:outline-none"
                         />
@@ -302,9 +318,13 @@ export function AdminPanel() {
 
                     {/* Existing Projects */}
                     <div className="space-y-4">
-                      <h3 className="text-xl text-white">Projetos Existentes</h3>
+                      <h3 className="text-xl text-white">
+                        Projetos Existentes
+                      </h3>
                       {projects.length === 0 ? (
-                        <p className="text-neutral-400">Nenhum projeto cadastrado</p>
+                        <p className="text-neutral-400">
+                          Nenhum projeto cadastrado
+                        </p>
                       ) : (
                         projects.map((project) => (
                           <div
@@ -378,8 +398,9 @@ export function AdminPanel() {
                                     {project.title}
                                   </h4>
                                   <p className="text-neutral-400 text-sm">
-                                    {categories.find((c) => c.id === project.category)
-                                      ?.label || project.category}
+                                    {categories.find(
+                                      (c) => c.id === project.category,
+                                    )?.label || project.category}
                                   </p>
                                 </div>
                                 <div className="flex gap-2">
@@ -390,7 +411,9 @@ export function AdminPanel() {
                                     <Edit2 size={16} />
                                   </button>
                                   <button
-                                    onClick={() => handleDeleteProject(project.id)}
+                                    onClick={() =>
+                                      handleDeleteProject(project.id)
+                                    }
                                     className="p-2 bg-red-700 hover:bg-red-600 text-white rounded transition-colors"
                                   >
                                     <Trash2 size={16} />
@@ -406,28 +429,40 @@ export function AdminPanel() {
                 )}
 
                 {/* About Tab */}
-                {activeTab === 'about' && (
+                {activeTab === "about" && (
                   <div className="bg-neutral-800 p-6 rounded-lg">
-                    <h3 className="text-xl text-white mb-4">Editar Sobre Nós</h3>
+                    <h3 className="text-xl text-white mb-4">
+                      Editar Sobre Nós
+                    </h3>
                     <div className="space-y-4">
                       <div>
-                        <label className="block text-neutral-300 mb-2">Título</label>
+                        <label className="block text-neutral-300 mb-2">
+                          Título
+                        </label>
                         <input
                           type="text"
                           value={aboutContent.title}
                           onChange={(e) =>
-                            setAboutContent({ ...aboutContent, title: e.target.value })
+                            setAboutContent({
+                              ...aboutContent,
+                              title: e.target.value,
+                            })
                           }
                           className="w-full px-4 py-3 bg-neutral-900 border border-neutral-700 rounded-lg text-white focus:border-red-700 focus:outline-none"
                           placeholder="Ex: Sobre Nós"
                         />
                       </div>
                       <div>
-                        <label className="block text-neutral-300 mb-2">Subtítulo</label>
+                        <label className="block text-neutral-300 mb-2">
+                          Subtítulo
+                        </label>
                         <textarea
                           value={aboutContent.subtitle}
                           onChange={(e) =>
-                            setAboutContent({ ...aboutContent, subtitle: e.target.value })
+                            setAboutContent({
+                              ...aboutContent,
+                              subtitle: e.target.value,
+                            })
                           }
                           rows={2}
                           className="w-full px-4 py-3 bg-neutral-900 border border-neutral-700 rounded-lg text-white focus:border-red-700 focus:outline-none resize-none"
