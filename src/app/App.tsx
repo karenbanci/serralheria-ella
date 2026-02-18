@@ -1,7 +1,6 @@
 import { createHashRouter, RouterProvider } from "react-router-dom";
 import { Layout } from "./layouts/Layout";
 import { Home } from "./pages/Home";
-import { About } from "./pages/About";
 import { Login } from "./pages/Login";
 import { Admin } from "./pages/Admin";
 import { NotFound } from "./pages/NotFound";
@@ -12,7 +11,6 @@ const router = createHashRouter([
     Component: Layout,
     children: [
       { index: true, Component: Home },
-      { path: "sobre", Component: About },
       { path: "login", Component: Login },
       { path: "admin", Component: Admin },
       { path: "*", Component: NotFound },
