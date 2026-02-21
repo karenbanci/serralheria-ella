@@ -96,14 +96,14 @@ export function HeroSection() {
         transition={{ delay: 1.2, duration: 0.8 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2"
       >
-        <a href="/#sobre">
+        <MotionHashLink key="sobre" to="/#sobre">
           <motion.div
             animate={{ y: [0, 10, 0] }}
             transition={{ repeat: Infinity, duration: 2 }}
           >
             <ChevronDown size={32} className="text-white cursor-pointer" />
           </motion.div>
-        </a>
+        </MotionHashLink>
       </motion.div>
     </section>
   );
