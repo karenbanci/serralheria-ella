@@ -109,7 +109,7 @@ export function Header() {
             <nav className="container mx-auto px-4 py-4 flex flex-col gap-4">
               {menuItems.map((item) =>
                 item.href.includes("#") ? (
-                  <HashLink
+                  <MotionHashLink
                     key={item.href}
                     to={item.href}
                     smooth
@@ -117,7 +117,7 @@ export function Header() {
                     className="text-neutral-200 hover:text-red-700 transition-colors py-2"
                   >
                     {item.label}
-                  </HashLink>
+                  </MotionHashLink>
                 ) : (
                   <a
                     key={item.href}
