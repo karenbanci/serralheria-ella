@@ -46,7 +46,7 @@ export function Header() {
             <MotionHashLink
               to="#"
               smooth
-              initial={{ opacity: 0, y: -20 }}
+              initial={{ opacity: 1, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               className="text-neutral-200 hover:text-red-700 transition-colors duration-300 relative group"
             >
