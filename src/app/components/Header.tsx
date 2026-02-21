@@ -43,8 +43,16 @@ export function Header() {
             transition={{ delay: 0.2 }}
             className="text-2xl text-white"
           >
-            <span className="font-bold">Serralheria</span>{" "}
-            <span className="text-red-700">ELLA</span>
+            <MotionHashLink
+              to="#"
+              smooth
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-neutral-200 hover:text-red-700 transition-colors duration-300 relative group"
+            >
+              <span className="font-bold">Serralheria</span>{" "}
+              <span className="text-red-700">ELLA</span>
+            </MotionHashLink>
           </motion.div>
 
           {/* Desktop Menu */}

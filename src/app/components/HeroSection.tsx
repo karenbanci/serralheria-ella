@@ -1,7 +1,10 @@
 import { motion } from "motion/react";
 import { ChevronDown } from "lucide-react";
+import { HashLink } from "react-router-hash-link";
 
 export function HeroSection() {
+  const MotionHashLink = motion(HashLink);
+
   return (
     <section
       id="home"
@@ -60,18 +63,28 @@ export function HeroSection() {
             transition={{ delay: 0.8, duration: 0.6 }}
             className="flex flex-col sm:flex-row gap-4 justify-center items-center"
           >
-            <a
-              href="#contact"
+            <MotionHashLink
+              key="whatsapp-link"
+              to="https://wa.me/5511989415518?text=Olá%2C%20gostaria%20de%20solicitar%20um%20orçamento"
+              smooth
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              target="_blank"
               className="px-8 py-4 bg-red-700 hover:bg-red-600 text-white rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
             >
               Solicite um Orçamento
-            </a>
-            <a
-              href="#portfolio"
+            </MotionHashLink>
+
+            <MotionHashLink
+              key="whatsapp-link"
+              to="/#portfolio"
+              smooth
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
               className="px-8 py-4 bg-transparent border-2 border-white hover:bg-white hover:text-neutral-950 text-white rounded-lg transition-all duration-300"
             >
-              Ver Portfólio
-            </a>
+              Portfólio
+            </MotionHashLink>
           </motion.div>
         </motion.div>
       </div>
@@ -83,14 +96,14 @@ export function HeroSection() {
         transition={{ delay: 1.2, duration: 0.8 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2"
       >
-        <a href="#sobre">
+        <MotionHashLink key="sobre" to="/#sobre">
           <motion.div
             animate={{ y: [0, 10, 0] }}
             transition={{ repeat: Infinity, duration: 2 }}
           >
             <ChevronDown size={32} className="text-white cursor-pointer" />
           </motion.div>
-        </a>
+        </MotionHashLink>
       </motion.div>
     </section>
   );
