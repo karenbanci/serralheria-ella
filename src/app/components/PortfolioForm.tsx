@@ -94,27 +94,23 @@ export function PortfolioForm({ onClose, onSave }: PortfolioFormProps) {
         return;
       }
 
-      const res = await fetch("/make-server-294ae748/portfolio/db", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
+      const { data, error } = await supabase
+        .from("portfolio")
+        .insert({
           title,
           description,
           category,
           image_url: imageUrl,
-        }),
-      });
+          created_by: sessionData?.session?.user?.id,
+          created_by_name: userName,
+        })
+        .select()
+        .single();
 
-      const result = await res.json();
-      if (!result.success) {
-        alert(
-          "Erro ao salvar portfólio: " + (result.error || "erro desconhecido"),
-        );
+      if (error) {
+        alert("Erro ao salvar portfólio: " + error.message);
       } else {
-        onSave(result.data);
+        onSave(data);
         onClose();
       }
     } catch (err: any) {
