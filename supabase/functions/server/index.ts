@@ -5,6 +5,15 @@ import * as kv from "./kv_store.tsx";
 import { createClient } from "npm:@supabase/supabase-js";
 const app = new Hono();
 
+function escapeHtml(value: string) {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
 // Enable logger
 app.use("*", logger(console.log));
 
@@ -119,6 +128,126 @@ app.put("/make-server-294ae748/about", async (c) => {
     });
   } catch (error) {
     console.error("Error updating about content:", error);
+    return c.json({ success: false, error: String(error) }, 500);
+  }
+});
+
+// Public contact route: sends email using Brevo
+app.post("/make-server-294ae748/contact", async (c) => {
+  try {
+    const brevoApiKey = Deno.env.get("BREVO_API_KEY");
+    const contactToEmail = Deno.env.get("CONTACT_TO_EMAIL");
+    const contactFromEmail =
+      Deno.env.get("CONTACT_FROM_EMAIL") || "no-reply@serralheriaella.com";
+
+    if (!brevoApiKey || !contactToEmail) {
+      console.error("Missing BREVO_API_KEY or CONTACT_TO_EMAIL in function env");
+      return c.json(
+        {
+          success: false,
+          error: "Server misconfigured: missing BREVO_API_KEY or CONTACT_TO_EMAIL",
+        },
+        500,
+      );
+    }
+
+    const body = await c.req.json();
+    const {
+      name,
+      email,
+      phone,
+      message,
+      website,
+    }: {
+      name?: string;
+      email?: string;
+      phone?: string;
+      message?: string;
+      website?: string;
+    } = body ?? {};
+
+    // Honeypot (bots usually fill hidden fields)
+    if (website && website.trim().length > 0) {
+      return c.json({ success: true, message: "ok" });
+    }
+
+    if (!name || !email || !phone || !message) {
+      return c.json({ success: false, error: "Missing required fields" }, 400);
+    }
+
+    const trimmedName = name.trim();
+    const trimmedEmail = email.trim();
+    const trimmedPhone = phone.trim();
+    const trimmedMessage = message.trim();
+
+    if (
+      trimmedName.length < 2 ||
+      trimmedName.length > 120 ||
+      trimmedEmail.length > 255 ||
+      trimmedPhone.length > 40 ||
+      trimmedMessage.length < 5 ||
+      trimmedMessage.length > 4000
+    ) {
+      return c.json({ success: false, error: "Invalid field size" }, 400);
+    }
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(trimmedEmail)) {
+      return c.json({ success: false, error: "Invalid email" }, 400);
+    }
+
+    const escapedName = escapeHtml(trimmedName);
+    const escapedEmail = escapeHtml(trimmedEmail);
+    const escapedPhone = escapeHtml(trimmedPhone);
+    const escapedMessage = escapeHtml(trimmedMessage).replaceAll("\n", "<br />");
+
+    const subject = `Novo contato do site - ${trimmedName}`;
+    const htmlContent = `
+      <h2>Novo contato recebido</h2>
+      <p><strong>Nome:</strong> ${escapedName}</p>
+      <p><strong>Email:</strong> ${escapedEmail}</p>
+      <p><strong>Telefone:</strong> ${escapedPhone}</p>
+      <p><strong>Mensagem:</strong><br />${escapedMessage}</p>
+    `;
+
+    const textContent = [
+      "Novo contato recebido",
+      `Nome: ${trimmedName}`,
+      `Email: ${trimmedEmail}`,
+      `Telefone: ${trimmedPhone}`,
+      "Mensagem:",
+      trimmedMessage,
+    ].join("\n");
+
+    const brevoResponse = await fetch("https://api.brevo.com/v3/smtp/email", {
+      method: "POST",
+      headers: {
+        accept: "application/json",
+        "content-type": "application/json",
+        "api-key": brevoApiKey,
+      },
+      body: JSON.stringify({
+        sender: { name: "Site Serralheria ELLA", email: contactFromEmail },
+        to: [{ email: contactToEmail, name: "Serralheria ELLA" }],
+        replyTo: { email: trimmedEmail, name: trimmedName },
+        subject,
+        htmlContent,
+        textContent,
+      }),
+    });
+
+    if (!brevoResponse.ok) {
+      const responseBody = await brevoResponse.text();
+      console.error("Brevo send failed:", responseBody);
+      return c.json(
+        { success: false, error: "Failed to send email through Brevo" },
+        502,
+      );
+    }
+
+    return c.json({ success: true, message: "Contact sent successfully" });
+  } catch (error) {
+    console.error("Error sending contact email:", error);
     return c.json({ success: false, error: String(error) }, 500);
   }
 });
