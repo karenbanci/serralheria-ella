@@ -2,6 +2,7 @@ import { motion } from "motion/react";
 import { Mail, MapPin, Phone, CheckCircle } from "lucide-react";
 import { useInView } from "../hooks/useInView";
 import { useState } from "react";
+import { projectId, publicAnonKey } from "../../../utils/supabase/info";
 
 export function ContactSection() {
   const [ref, isInView] = useInView({ threshold: 0.2 });
@@ -12,17 +13,42 @@ export function ContactSection() {
     message: "",
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const API_URL = `https://${projectId}.supabase.co/functions/v1/make-server-294ae748`;
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Simula envio do formulário
-    setIsSubmitted(true);
+    setIsSubmitting(true);
+    setSubmitError(null);
+    setIsSubmitted(false);
 
-    // Reseta o formulário após 3 segundos
-    setTimeout(() => {
+    try {
+      const response = await fetch(`${API_URL}/contact`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${publicAnonKey}`,
+        },
+        body: JSON.stringify({ ...formData, website: "" }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data?.success) {
+        throw new Error(data?.error || "Falha ao enviar mensagem.");
+      }
+
+      setIsSubmitted(true);
       setFormData({ name: "", email: "", phone: "", message: "" });
-      setIsSubmitted(false);
-    }, 3000);
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Erro inesperado ao enviar.";
+      setSubmitError(message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const contactInfo = [
@@ -150,9 +176,10 @@ export function ContactSection() {
 
               <button
                 type="submit"
+                disabled={isSubmitting}
                 className="w-full px-8 py-4 bg-red-700 hover:bg-red-600 text-white rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
               >
-                Enviar Mensagem
+                {isSubmitting ? "Enviando..." : "Enviar Mensagem"}
               </button>
             </form>
 
@@ -166,6 +193,10 @@ export function ContactSection() {
                   Mensagem enviada! Entraremos em contato em breve.
                 </p>
               </div>
+            )}
+
+            {submitError && (
+              <div className="mt-4 text-center text-red-400">{submitError}</div>
             )}
           </motion.div>
 
