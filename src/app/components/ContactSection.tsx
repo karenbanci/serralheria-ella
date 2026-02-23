@@ -2,7 +2,7 @@ import { motion } from "motion/react";
 import { Mail, MapPin, Phone, CheckCircle } from "lucide-react";
 import { useInView } from "../hooks/useInView";
 import { useState } from "react";
-import { projectId, publicAnonKey } from "/utils/supabase/info";
+import { projectId, publicAnonKey } from "../../../utils/supabase/info";
 
 export function ContactSection() {
   const [ref, isInView] = useInView({ threshold: 0.2 });
@@ -15,12 +15,6 @@ export function ContactSection() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const [lastSubmittedData, setLastSubmittedData] = useState<{
-    name: string;
-    email: string;
-    phone: string;
-    message: string;
-  } | null>(null);
 
   const API_URL = `https://${projectId}.supabase.co/functions/v1/make-server-294ae748`;
 
@@ -46,7 +40,6 @@ export function ContactSection() {
         throw new Error(data?.error || "Falha ao enviar mensagem.");
       }
 
-      setLastSubmittedData(formData);
       setIsSubmitted(true);
       setFormData({ name: "", email: "", phone: "", message: "" });
     } catch (error) {
@@ -57,12 +50,6 @@ export function ContactSection() {
       setIsSubmitting(false);
     }
   };
-
-  const whatsappNumber = "5511989415518";
-  const whatsappText = lastSubmittedData
-    ? `Olá! Sou ${lastSubmittedData.name}. Acabei de enviar uma mensagem pelo site. Meu telefone é ${lastSubmittedData.phone}.`
-    : "Olá! Vim pelo site da Serralheria ELLA.";
-  const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappText)}`;
 
   const contactInfo = [
     {
@@ -205,14 +192,6 @@ export function ContactSection() {
                 <p className="text-green-500">
                   Mensagem enviada! Entraremos em contato em breve.
                 </p>
-                <a
-                  href={whatsappLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block mt-3 px-5 py-2 bg-green-600 hover:bg-green-500 text-white rounded-lg transition-colors"
-                >
-                  Enviar também no WhatsApp
-                </a>
               </div>
             )}
 

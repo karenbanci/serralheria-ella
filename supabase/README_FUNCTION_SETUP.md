@@ -10,6 +10,12 @@ Quick steps to finish setup and deploy the server function
   - `BREVO_API_KEY` = API key da sua conta Brevo
   - `CONTACT_TO_EMAIL` = e-mail que receberá os contatos do site
   - `CONTACT_FROM_EMAIL` = remetente validado no Brevo (ex: no-reply@seudominio.com)
+  - `WHATSAPP_ACCESS_TOKEN` = token da API do WhatsApp Cloud (Meta)
+  - `WHATSAPP_PHONE_NUMBER_ID` = Phone Number ID do seu WhatsApp Business
+  - `WHATSAPP_TO` = número que vai receber as notificações (formato internacional, ex: 5511989415518)
+  - `WHATSAPP_TEMPLATE_NAME` = nome do template aprovado no WhatsApp Manager
+  - `WHATSAPP_TEMPLATE_LANGUAGE` = idioma do template (ex: pt_BR)
+  - `WHATSAPP_ALLOW_TEXT_FALLBACK` = `true` para tentar texto livre se template falhar (opcional; padrão `false`)
 
   Dashboard steps:
   - Open Supabase Dashboard → Functions → server → Settings → Environment variables
@@ -36,8 +42,14 @@ supabase functions deploy server --project-ref <project-ref> --no-verify-jwt
 
 6) Contato por e-mail (Brevo) + WhatsApp
 - A rota `POST /make-server-294ae748/contact` envia o formulário da seção Contato para o `CONTACT_TO_EMAIL` via Brevo.
-- No frontend, após sucesso no envio, aparece o botão "Enviar também no WhatsApp" com mensagem pré-preenchida para o número comercial.
-- O WhatsApp neste fluxo é iniciado pelo visitante (link `wa.me`), sem automação oficial da API do WhatsApp.
+- Se as variáveis `WHATSAPP_ACCESS_TOKEN`, `WHATSAPP_PHONE_NUMBER_ID`, `WHATSAPP_TO` e `WHATSAPP_TEMPLATE_NAME` estiverem configuradas, a mesma rota envia automaticamente notificação via template oficial do WhatsApp.
+- O envio para WhatsApp é feito no backend (sem clique do cliente no site).
+
+Template esperado (ordem dos placeholders no corpo):
+- `{{1}}` = nome
+- `{{2}}` = telefone
+- `{{3}}` = email
+- `{{4}}` = mensagem
 
 If you want, I can also:
 - move the upload server-side (so the client doesn't need anon key), or

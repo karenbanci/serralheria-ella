@@ -2,7 +2,7 @@ import { motion } from "motion/react";
 import { Shield, Award, Users } from "lucide-react";
 import { useInView } from "../hooks/useInView";
 import { useState, useEffect } from "react";
-import { projectId, publicAnonKey } from "/utils/supabase/info";
+import { projectId, publicAnonKey } from "../../../utils/supabase/info";
 
 export function AboutSection() {
   const [ref, isInView] = useInView({ threshold: 0.2 });
