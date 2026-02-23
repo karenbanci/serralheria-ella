@@ -9,15 +9,16 @@ ADD COLUMN IF NOT EXISTS created_by_name text;
 ALTER TABLE public.portfolio ENABLE ROW LEVEL SECURITY;
 
 -- Allow public SELECTs (optional; remove if you want strict privacy)
-CREATE POLICY IF NOT EXISTS allow_select_public ON public.portfolio FOR
-SELECT USING (true);
+-- Allow public SELECTs (optional; remove if you want strict privacy)
+CREATE POLICY allow_select_public ON public.portfolio
+    FOR SELECT
+    USING (true);
 
 -- Allow authenticated users to insert rows only when created_by = auth.uid()
-CREATE POLICY IF NOT EXISTS allow_auth_inserts ON public.portfolio FOR
-INSERT
+CREATE POLICY allow_auth_inserts ON public.portfolio
+    FOR INSERT
     TO authenticated
-WITH
-    CHECK (auth.uid () = created_by);
+    WITH CHECK (auth.uid() = created_by);
 
 COMMIT;
 

@@ -53,11 +53,18 @@ export function PortfolioForm({ onClose, onSave }: PortfolioFormProps) {
         const fileName = `${Date.now()}.${fileExt}`;
         const filePath = `portfolio/${fileName}`;
 
-        const { error: uploadError } = await supabase.storage
+        const { data: uploadData, error: uploadError } = await supabase.storage
           .from("portfolio-images")
           .upload(filePath, file, { cacheControl: "3600", upsert: false });
 
-        if (uploadError) throw uploadError;
+        // log upload response for debugging
+        console.log("supabase upload response:", { uploadData, uploadError });
+
+        if (uploadError) {
+          // include any status/message details we can surface
+          const msg = uploadError.message || JSON.stringify(uploadError);
+          throw new Error(`Upload failed: ${msg}`);
+        }
 
         const { data: publicData } = supabase.storage
           .from("portfolio-images")

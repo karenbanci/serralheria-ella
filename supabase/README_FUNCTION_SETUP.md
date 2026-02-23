@@ -8,6 +8,11 @@ Quick steps to finish setup and deploy the server function
   - `SUPABASE_URL` = your project URL (e.g. https://mtflptbmmbibmcaxmrcu.supabase.co)
   - `SUPABASE_SERVICE_ROLE_KEY` = your Service Role Key (keep secret)
 
+  Dashboard steps:
+  - Open Supabase Dashboard → Functions → server → Settings → Environment variables
+  - Add `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` (paste the Service Role Key in full; wrap in quotes if prompted)
+  - Save and re-deploy / restart the function from the UI
+
 3) Deploy the function
 - Easiest: use the Dashboard UI to deploy the function folder `supabase/functions/server`.
 - Or install Supabase CLI (Homebrew on macOS):
