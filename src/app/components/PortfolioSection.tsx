@@ -1,26 +1,46 @@
 import { motion } from "motion/react";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useInView } from "../hooks/useInView";
-import { projectId, publicAnonKey } from "/utils/supabase/info";
+import { supabase } from "../lib/supabase";
+import { PortfolioCategoryFilter } from "./PortfolioCategoryFilter";
+import { PortfolioProjectsGrid } from "./PortfolioProjectsGrid";
+import { DashboardReturnButton } from "./DashboardReturnButton";
+import {
+  PORTFOLIO_CATEGORY_OPTIONS,
+  normalizePortfolioCategory,
+} from "../constants/portfolioCategories";
 
 export function PortfolioSection() {
   const [ref, isInView] = useInView({ threshold: 0.1 });
   const [activeCategory, setActiveCategory] = useState("all");
   const [projects, setProjects] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-
-  const API_URL = `https://${projectId}.supabase.co/functions/v1/make-server-294ae748`;
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
 
   // Load projects from database
   useEffect(() => {
     const loadProjects = async () => {
       try {
-        const response = await fetch(`${API_URL}/portfolio`, {
-          headers: { Authorization: `Bearer ${publicAnonKey}` },
-        });
-        const data = await response.json();
-        if (data.success && data.projects.length > 0) {
-          setProjects(data.projects);
+        const { data, error } = await supabase
+          .from("portfolio")
+          .select("id, title, category, image_url")
+          .order("id", { ascending: false });
+
+        if (error) {
+          throw error;
+        }
+
+        if (data && data.length > 0) {
+          const mappedProjects = data.map((project) => ({
+            id: project.id,
+            title: project.title,
+            category: normalizePortfolioCategory(project.category),
+            image: project.image_url,
+            rawCategory: project.category,
+          }));
+          setProjects(mappedProjects);
         } else {
           // Use default projects if database is empty
           setProjects(getDefaultProjects());
@@ -34,6 +54,27 @@ export function PortfolioSection() {
     };
 
     loadProjects();
+  }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    supabase.auth.getSession().then(({ data }) => {
+      if (isMounted) {
+        setIsLoggedIn(Boolean(data?.session));
+      }
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsLoggedIn(Boolean(session));
+    });
+
+    return () => {
+      isMounted = false;
+      subscription.unsubscribe();
+    };
   }, []);
 
   const getDefaultProjects = () => [
@@ -153,14 +194,7 @@ export function PortfolioSection() {
     },
   ];
 
-  const categories = [
-    { id: "all", label: "Todos" },
-    { id: "portoes", label: "Portões" },
-    { id: "box", label: "Box de Banheiro" },
-    { id: "escada", label: "Escadas e Guarda-Corpos" },
-    { id: "fachadas", label: "Fachadas" },
-    { id: "esquadrias", label: "Esquadrias" },
-  ];
+  const categories = PORTFOLIO_CATEGORY_OPTIONS;
 
   const filteredProjects =
     activeCategory === "all"
@@ -189,6 +223,10 @@ export function PortfolioSection() {
             Conheça alguns dos nossos projetos realizados com excelência e
             dedicação.
           </p>
+          {/* <DashboardReturnButton
+            isLoggedIn={isLoggedIn}
+            onClick={() => navigate("/admin")}
+          /> */}
         </motion.div>
 
         {/* Category Filter */}
@@ -196,52 +234,20 @@ export function PortfolioSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="flex flex-wrap justify-center gap-4 mb-12"
         >
-          {categories.map((category) => (
-            <button
-              key={category.id}
-              onClick={() => setActiveCategory(category.id)}
-              className={`px-6 py-3 rounded-lg transition-all duration-300 ${
-                activeCategory === category.id
-                  ? "bg-red-700 text-white shadow-lg shadow-red-700/30"
-                  : "bg-neutral-800 text-neutral-400 hover:bg-neutral-700"
-              }`}
-            >
-              {category.label}
-            </button>
-          ))}
+          <PortfolioCategoryFilter
+            categories={categories}
+            activeCategory={activeCategory}
+            onChangeCategory={setActiveCategory}
+          />
         </motion.div>
 
         {/* Projects Grid */}
-        <motion.div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredProjects.map((project, index) => (
-            <motion.div
-              key={project.id}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={isInView ? { opacity: 1, scale: 1 } : {}}
-              transition={{ duration: 0.5, delay: 0.1 * index }}
-              layout
-              className="group relative overflow-hidden rounded-lg cursor-pointer"
-            >
-              <div className="aspect-[4/3] overflow-hidden">
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
-                />
-              </div>
-              <div className="absolute inset-0 bg-gradient-to-t from-red-950/90 via-neutral-950/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                <div>
-                  <h3 className="text-xl text-white mb-2">{project.title}</h3>
-                  <p className="text-red-400 text-sm">
-                    {categories.find((c) => c.id === project.category)?.label}
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
+        <PortfolioProjectsGrid
+          projects={filteredProjects}
+          categories={categories}
+          isInView={isInView}
+        />
       </div>
     </section>
   );

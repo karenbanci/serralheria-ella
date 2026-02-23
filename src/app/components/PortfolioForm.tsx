@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import supabase, { type PortfolioItem } from "../lib/supabase";
+import { PORTFOLIO_FORM_CATEGORIES } from "../constants/portfolioCategories";
 
-const categories = ["Portões", "Box", "Escadas", "Fachadas", "Esquadrias"];
+const categories = PORTFOLIO_FORM_CATEGORIES;
 
 interface PortfolioFormProps {
   onClose: () => void;
