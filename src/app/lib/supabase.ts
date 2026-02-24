@@ -13,9 +13,7 @@ if (!hasSupabaseEnv) {
 }
 
 const safeSupabaseUrl = supabaseUrl || 'https://placeholder.supabase.co';
-const safeSupabaseAnonKey =
-  supabaseAnonKey ||
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJwbGFjZWhvbGRlciIsInJlZiI6InBsYWNlaG9sZGVyIiwicm9sZSI6ImFub24iLCJpYXQiOjAsImV4cCI6NDAwMDAwMDAwMH0.placeholder-signature';
+const safeSupabaseAnonKey = supabaseAnonKey || 'public-anon-key-not-configured';
 
 export const supabase = createClient(safeSupabaseUrl, safeSupabaseAnonKey);
 
