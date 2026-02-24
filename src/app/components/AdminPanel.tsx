@@ -68,8 +68,8 @@ export function AdminPanel() {
 
     const baseUrl = import.meta.env.VITE_SUPABASE_URL;
     const functionUrls = [
-      `${baseUrl}/functions/v1/server/make-server-294ae748/portfolio/db/${normalizedProjectId}`,
       `${baseUrl}/functions/v1/make-server-294ae748/portfolio/db/${normalizedProjectId}`,
+      `${baseUrl}/functions/v1/server/make-server-294ae748/portfolio/db/${normalizedProjectId}`,
     ];
 
     let lastErrorMessage = "HTTP 404";
