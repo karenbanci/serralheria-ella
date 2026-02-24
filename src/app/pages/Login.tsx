@@ -1,11 +1,7 @@
 import React from "react";
 import { useState } from "react";
-import { createClient } from "@supabase/supabase-js";
 import { useNavigate } from "react-router";
-
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+import { supabase } from "../lib/supabase";
 
 export function Login() {
   const navigate = useNavigate();
@@ -20,6 +16,17 @@ export function Login() {
     e.preventDefault();
     setLoading(true);
     setError("");
+
+    if (
+      !import.meta.env.VITE_SUPABASE_URL ||
+      !import.meta.env.VITE_SUPABASE_ANON_KEY
+    ) {
+      setError(
+        "Configuração ausente no deploy: defina VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY.",
+      );
+      setLoading(false);
+      return;
+    }
 
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
