@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -33,10 +33,27 @@ export function Header() {
     window.scrollTo({ top: sectionTop - offset, behavior: "smooth" });
   };
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   const handleNavigation = (item: { path?: string; sectionId?: string }) => {
     setIsMobileMenuOpen(false);
 
     if (item.path) {
+      if (item.path === "/") {
+        if (location.pathname !== "/") {
+          navigate("/");
+          setTimeout(() => {
+            scrollToTop();
+          }, 120);
+          return;
+        }
+
+        scrollToTop();
+        return;
+      }
+
       navigate(item.path);
       return;
     }
@@ -73,16 +90,16 @@ export function Header() {
             transition={{ delay: 0.2 }}
             className="text-2xl text-white"
           >
-            <motion.div
+            <motion.button
+              type="button"
+              onClick={() => handleNavigation({ path: "/" })}
               initial={{ opacity: 1, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               className="text-neutral-200 hover:text-red-700 transition-colors duration-300 relative group"
             >
-              <Link to="/">
-                <span className="font-bold">Serralheria</span>{" "}
-                <span className="text-red-700">ELLA</span>
-              </Link>
-            </motion.div>
+              <span className="font-bold">Serralheria</span>{" "}
+              <span className="text-red-700">ELLA</span>
+            </motion.button>
           </motion.div>
 
           {/* Desktop Menu */}
