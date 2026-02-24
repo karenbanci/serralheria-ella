@@ -16,7 +16,7 @@ export function Header() {
   }, []);
 
   const menuItems = [
-    { label: "Início", href: "#" },
+    { label: "Início", href: "/" },
     { label: "Sobre Nós", href: "#sobre" },
     { label: "Portfólio", href: "/#portfolio" },
     { label: "Contato", href: "#contato" },
@@ -44,7 +44,7 @@ export function Header() {
             className="text-2xl text-white"
           >
             <MotionHashLink
-              to="#"
+              to="/"
               smooth
               initial={{ opacity: 1, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
