@@ -18,6 +18,16 @@ export function AdminPanel() {
   const [showPreview, setShowPreview] = useState(false);
   const [userDisplay, setUserDisplay] = useState("Usuário");
 
+  async function fetchProjects() {
+    const { data, error } = await supabase.from("portfolio").select("*");
+    if (error) {
+      console.error("Erro ao buscar projetos:", error);
+      return;
+    }
+
+    setProjects(data ?? []);
+  }
+
   useEffect(() => {
     async function loadAdminData() {
       const { data: userData } = await supabase.auth.getUser();
@@ -35,12 +45,7 @@ export function AdminPanel() {
         "Usuário";
       setUserDisplay(displayName);
 
-      const { data, error } = await supabase.from("portfolio").select("*");
-      if (error) {
-        console.error("Erro ao buscar projetos:", error);
-      } else if (data) {
-        setProjects(data);
-      }
+      await fetchProjects();
     }
 
     loadAdminData();
@@ -51,17 +56,59 @@ export function AdminPanel() {
   }
 
   async function handleRemoveProject(projectId: string | number) {
-    const { error } = await supabase
-      .from("portfolio")
-      .delete()
-      .eq("id", projectId);
+    const normalizedProjectId = String(projectId);
+    const { data: sessionData } = await supabase.auth.getSession();
+    const accessToken = sessionData?.session?.access_token;
 
-    if (error) {
-      alert("Erro ao remover projeto: " + error.message);
+    if (!accessToken) {
+      alert("Sessão expirada. Faça login novamente.");
+      navigate("/login");
       return;
     }
 
-    setProjects((prev) => prev.filter((project) => project.id !== projectId));
+    const baseUrl = import.meta.env.VITE_SUPABASE_URL;
+    const functionUrls = [
+      `${baseUrl}/functions/v1/server/make-server-294ae748/portfolio/db/${normalizedProjectId}`,
+      `${baseUrl}/functions/v1/make-server-294ae748/portfolio/db/${normalizedProjectId}`,
+    ];
+
+    let lastErrorMessage = "HTTP 404";
+    let removed = false;
+
+    for (const functionUrl of functionUrls) {
+      const response = await fetch(functionUrl, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      const result = await response.json().catch(() => null);
+
+      if (response.ok && result?.success) {
+        removed = true;
+        break;
+      }
+
+      const serverMessage = result?.error
+        ? String(result.error)
+        : `HTTP ${response.status}`;
+      lastErrorMessage = serverMessage;
+
+      if (response.status !== 404) {
+        break;
+      }
+    }
+
+    if (!removed) {
+      alert("Erro ao remover projeto: " + lastErrorMessage);
+      return;
+    }
+
+    setProjects((prev) =>
+      prev.filter((project) => String(project.id) !== normalizedProjectId),
+    );
+    await fetchProjects();
   }
 
   async function handleLogout() {
