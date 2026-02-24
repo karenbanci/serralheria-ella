@@ -2,8 +2,10 @@ import { motion } from "motion/react";
 import { Mail, MapPin, Phone, CheckCircle } from "lucide-react";
 import { useInView } from "../hooks/useInView";
 import { useState } from "react";
+import { HashLink } from "react-router-hash-link";
 
 export function ContactSection() {
+  const MotionHashLink = motion(HashLink);
   const [ref, isInView] = useInView({ threshold: 0.2 });
   const [formData, setFormData] = useState({
     name: "",
@@ -70,106 +72,6 @@ export function ContactSection() {
         </motion.div>
 
         <div className="grid md:grid-cols-2 gap-12">
-          {/* Contact Form */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <label htmlFor="name" className="block text-neutral-300 mb-2">
-                  Nome Completo
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  value={formData.name}
-                  onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
-                  }
-                  required
-                  className="w-full px-4 py-3 bg-neutral-900 border border-neutral-700 rounded-lg focus:border-red-700 focus:outline-none text-white transition-colors"
-                  placeholder="Seu nome"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="email" className="block text-neutral-300 mb-2">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  value={formData.email}
-                  onChange={(e) =>
-                    setFormData({ ...formData, email: e.target.value })
-                  }
-                  required
-                  className="w-full px-4 py-3 bg-neutral-900 border border-neutral-700 rounded-lg focus:border-red-700 focus:outline-none text-white transition-colors"
-                  placeholder="seu@email.com"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="phone" className="block text-neutral-300 mb-2">
-                  Telefone
-                </label>
-                <input
-                  type="tel"
-                  id="phone"
-                  value={formData.phone}
-                  onChange={(e) =>
-                    setFormData({ ...formData, phone: e.target.value })
-                  }
-                  required
-                  className="w-full px-4 py-3 bg-neutral-900 border border-neutral-700 rounded-lg focus:border-red-700 focus:outline-none text-white transition-colors"
-                  placeholder="(XX) XXXXX-XXXX"
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="message"
-                  className="block text-neutral-300 mb-2"
-                >
-                  Mensagem
-                </label>
-                <textarea
-                  id="message"
-                  value={formData.message}
-                  onChange={(e) =>
-                    setFormData({ ...formData, message: e.target.value })
-                  }
-                  required
-                  rows={5}
-                  className="w-full px-4 py-3 bg-neutral-900 border border-neutral-700 rounded-lg focus:border-red-700 focus:outline-none text-white transition-colors resize-none"
-                  placeholder="Conte-nos sobre seu projeto..."
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="w-full px-8 py-4 bg-red-700 hover:bg-red-600 text-white rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
-              >
-                Enviar Mensagem
-              </button>
-            </form>
-
-            {isSubmitted && (
-              <div className="mt-4 text-center">
-                <CheckCircle
-                  size={24}
-                  className="text-green-500 inline-block mr-2"
-                />
-                <p className="text-green-500">
-                  Mensagem enviada! Entraremos em contato em breve.
-                </p>
-              </div>
-            )}
-          </motion.div>
-
-          {/* Contact Info */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
@@ -200,19 +102,27 @@ export function ContactSection() {
                 ))}
               </div>
             </div>
-
-            <div className="bg-gradient-to-br from-neutral-900 to-neutral-950 p-8 rounded-lg border border-red-900/20">
-              <h3 className="text-2xl text-white mb-4">
-                Horário de Atendimento
-              </h3>
-              <div className="space-y-2 text-neutral-300">
-                <p>Segunda a Segunda: 6h - 23h</p>
-                <p className="text-red-400 text-sm mt-3">
-                  Atendimento todos os dias!
-                </p>
-              </div>
-            </div>
           </motion.div>
+          <div className="bg-gradient-to-br from-neutral-900 to-neutral-950 p-8 rounded-lg border border-red-900/20">
+            <h3 className="text-2xl text-white mb-4">Horário de Atendimento</h3>
+            <div className="space-y-2 text-neutral-300">
+              <p>Segunda a Segunda: 6h - 23h</p>
+              <p className="text-red-400 text-sm mt-3">
+                Atendimento todos os dias!
+              </p>
+              <MotionHashLink
+                key="whatsapp-link"
+                to="https://wa.me/5511989415518?text=Olá%2C%20gostaria%20de%20solicitar%20um%20orçamento"
+                smooth
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                target="_blank"
+                className="inline-block mt-4 px-8 py-4 bg-red-700 hover:bg-red-600 text-white rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
+              >
+                Solicite um Orçamento
+              </MotionHashLink>
+            </div>
+          </div>
         </div>
       </div>
     </section>
