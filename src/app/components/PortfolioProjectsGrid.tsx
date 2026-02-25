@@ -33,7 +33,7 @@ export function PortfolioProjectsGrid({
           animate={isInView ? { opacity: 1, scale: 1 } : {}}
           transition={{ duration: 0.5, delay: 0.1 * index }}
           layout
-          className="group relative overflow-hidden rounded-lg cursor-pointer"
+          className="group relative overflow-hidden rounded-lg"
         >
           <div className="aspect-[4/3] overflow-hidden">
             <img
