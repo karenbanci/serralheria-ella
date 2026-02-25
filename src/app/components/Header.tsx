@@ -37,6 +37,15 @@ export function Header() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  const runAfterMobileMenuClose = (action: () => void) => {
+    if (isMobileMenuOpen) {
+      setTimeout(action, 220);
+      return;
+    }
+
+    action();
+  };
+
   const handleNavigation = (item: { path?: string; sectionId?: string }) => {
     setIsMobileMenuOpen(false);
 
@@ -61,14 +70,13 @@ export function Header() {
     if (!item.sectionId) return;
 
     if (location.pathname !== "/") {
-      navigate("/");
-      setTimeout(() => {
-        scrollToSection(item.sectionId!);
-      }, 120);
+      navigate(`/?section=${item.sectionId}`);
       return;
     }
 
-    scrollToSection(item.sectionId);
+    runAfterMobileMenuClose(() => {
+      scrollToSection(item.sectionId!);
+    });
   };
 
   return (

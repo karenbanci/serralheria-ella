@@ -11,9 +11,22 @@ export const Home: React.FC = () => {
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
+    const section = searchParams.get("section");
+
+    if (section) {
+      setTimeout(() => {
+        document
+          .getElementById(section)
+          ?.scrollIntoView({ behavior: "smooth" });
+      }, 120);
+      return;
+    }
+
     if (searchParams.get("preview") === "portfolio") {
       setTimeout(() => {
-        document.getElementById("portfolio")?.scrollIntoView({ behavior: "smooth" });
+        document
+          .getElementById("portfolio")
+          ?.scrollIntoView({ behavior: "smooth" });
       }, 100);
     }
   }, [location.search]);
