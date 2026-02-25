@@ -3,6 +3,7 @@ import { Shield, Award, Users } from "lucide-react";
 import { useInView } from "../hooks/useInView";
 import { useState, useEffect } from "react";
 import { projectId, publicAnonKey } from "/utils/supabase/info";
+import { RequestQuoteButton } from "./RequestQuoteButton";
 
 export function AboutSection() {
   const [ref, isInView] = useInView({ threshold: 0.2 });
@@ -107,12 +108,7 @@ export function AboutSection() {
               {content.description2}
             </p>
             <div className="pt-4">
-              <a
-                href="#contact"
-                className="inline-block px-6 py-3 bg-red-700 hover:bg-red-600 text-white rounded-lg transition-all duration-300 transform hover:scale-105"
-              >
-                Fale Conosco
-              </a>
+              <RequestQuoteButton className="mt-4" />
             </div>
           </motion.div>
         </div>

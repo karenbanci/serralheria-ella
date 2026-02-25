@@ -2,10 +2,9 @@ import { motion } from "motion/react";
 import { Mail, MapPin, Phone, CheckCircle } from "lucide-react";
 import { useInView } from "../hooks/useInView";
 import { useState } from "react";
-import { HashLink } from "react-router-hash-link";
+import { RequestQuoteButton } from "./RequestQuoteButton";
 
 export function ContactSection() {
-  const MotionHashLink = motion(HashLink);
   const [ref, isInView] = useInView({ threshold: 0.2 });
   const [formData, setFormData] = useState({
     name: "",
@@ -110,17 +109,7 @@ export function ContactSection() {
               <p className="text-red-400 text-sm mt-3">
                 Atendimento todos os dias!
               </p>
-              <MotionHashLink
-                key="whatsapp-link"
-                to="https://wa.me/5511989415518?text=Olá%2C%20gostaria%20de%20solicitar%20um%20orçamento"
-                smooth
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                target="_blank"
-                className="inline-block mt-4 px-8 py-4 bg-red-700 hover:bg-red-600 text-white rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
-              >
-                Solicite um Orçamento
-              </MotionHashLink>
+              <RequestQuoteButton className="mt-4" />
             </div>
           </div>
         </div>

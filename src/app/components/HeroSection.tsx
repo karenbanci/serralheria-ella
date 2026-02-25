@@ -1,6 +1,7 @@
 import { motion } from "motion/react";
 import { ChevronDown } from "lucide-react";
 import { HashLink } from "react-router-hash-link";
+import { RequestQuoteButton } from "./RequestQuoteButton";
 
 export function HeroSection() {
   const MotionHashLink = motion(HashLink);
@@ -63,17 +64,7 @@ export function HeroSection() {
             transition={{ delay: 0.8, duration: 0.6 }}
             className="flex flex-col sm:flex-row gap-4 justify-center items-center"
           >
-            <MotionHashLink
-              key="whatsapp-link"
-              to="https://wa.me/5511989415518?text=Olá%2C%20gostaria%20de%20solicitar%20um%20orçamento"
-              smooth
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              target="_blank"
-              className="px-8 py-4 bg-red-700 hover:bg-red-600 text-white rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
-            >
-              Solicite um Orçamento
-            </MotionHashLink>
+            <RequestQuoteButton />
 
             <MotionHashLink
               key="whatsapp-link"
